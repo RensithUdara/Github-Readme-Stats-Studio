@@ -1,0 +1,32 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/ui/index.html"
+    },
+    {
+      "source": "/style.css",
+      "destination": "/ui/style.css"
+    },
+    {
+      "source": "/script.js",
+      "destination": "/ui/script.js"
+    },
+    {
+      "source": "/manifest.json",
+      "destination": "/ui/manifest.json"
+    },
+    {
+      "source": "/robots.txt",
+      "destination": "/ui/robots.txt"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "/ui/sitemap.xml"
+    },
+    {
+      "source": "/icons/:path*",
+      "destination": "/ui/icons/:path*"
+    }
+  ]
+}
