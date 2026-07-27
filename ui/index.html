@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GitHub Readme Stats Studio</title>
+    <meta
+      name="description"
+      content="Design and preview GitHub readme stats cards with a local API."
+    />
+    <meta name="author" content="Rensith Udara" />
+    <meta name="theme-color" content="#10151f" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="icons/apple-icon-180x180.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="icons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="icons/favicon-16x16.png"
+    />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <a class="brand" href="/" aria-label="GitHub Readme Stats Studio">
+        <span class="brand-mark" aria-hidden="true">GR</span>
+        <span>
+          <strong>Readme Stats Studio</strong>
+          <small>Build polished profile cards</small>
+        </span>
+      </a>
+
+      <div class="header-actions">
+        <span class="status-pill" id="api-status">
+          <span class="status-dot"></span>
+          Checking API
+        </span>
+        <button
+          class="icon-button"
+          type="button"
+          id="refresh-button"
+          title="Refresh preview"
+          aria-label="Refresh preview"
+        >
+          <span aria-hidden="true">Reload</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="control-panel" aria-label="Card controls">
+        <section class="panel-section">
+          <div class="section-heading">
+            <span>Card Type</span>
+            <small id="active-card-label">Core set</small>
+          </div>
+
+          <div class="segmented" role="tablist" aria-label="Card type">
+            <button
+              class="segment active"
+              type="button"
+              data-type="core"
+              role="tab"
+              aria-selected="true"
+            >
+              Core
+            </button>
+            <button
+              class="segment"
+              type="button"
+              data-type="stats"
+              role="tab"
+              aria-selected="false"
+            >
+              Stats
+            </button>
+            <button
+              class="segment"
+              type="button"
+              data-type="streak"
+              role="tab"
+              aria-selected="false"
+            >
+              Streak
+            </button>
+            <button
+              class="segment"
+              type="button"
+              data-type="top-langs"
+              role="tab"
+              aria-selected="false"
+            >
+              Langs
+            </button>
+            <button
+              class="segment"
+              type="button"
+              data-type="repo"
+              role="tab"
+              aria-selected="false"
+            >
+              Repo
+            </button>
+            <button
+              class="segment"
+              type="button"
+              data-type="gist"
+              role="tab"
+              aria-selected="false"
+            >
+              Gist
+            </button>
+            <button
+              class="segment"
+              type="button"
+              data-type="wakatime"
+              role="tab"
+              aria-selected="false"
+            >
+              Waka
+            </button>
+          </div>
+
+          <div class="mini-stats" aria-label="Studio summary">
+            <span><strong id="summary-card-count">3</strong> Cards</span>
+            <span><strong id="summary-theme">One Dark</strong> Theme</span>
+          </div>
+        </section>
+
+        <section class="panel-section">
+          <div class="section-heading">
+            <span>Source</span>
+            <small>Inputs</small>
+          </div>
+
+          <label class="field" data-group="github">
+            <span>GitHub username</span>
+            <input
+              id="github-username"
+              type="text"
+              value="RensithUdara"
+              autocomplete="username"
+              spellcheck="false"
+            />
+          </label>
+
+          <label class="field" data-group="wakatime" hidden>
+            <span>WakaTime username</span>
+            <input
+              id="wakatime-username"
+              type="text"
+              value="RensithUdara"
+              spellcheck="false"
+            />
+          </label>
+
+          <label class="field" data-group="repo" hidden>
+            <span>Repository owner</span>
+            <input
+              id="repo-username"
+              type="text"
+              value="RensithUdara"
+              spellcheck="false"
+            />
+          </label>
+
+          <label class="field" data-group="repo" hidden>
+            <span>Repository name</span>
+            <input
+              id="repo"
+              type="text"
+              value="github-readme-stats-studio"
+              spellcheck="false"
+            />
+          </label>
+
+          <label class="field" data-group="gist" hidden>
+            <span>Gist ID</span>
+            <input
+              id="gist-id"
+              type="text"
+              placeholder="Paste a gist ID"
+              spellcheck="false"
+            />
+          </label>
+        </section>
+
+        <section class="panel-section">
+          <div class="section-heading">
+            <span>Appearance</span>
+            <small>Style</small>
+          </div>
+
+          <label class="field">
+            <span>Theme</span>
+            <select id="theme">
+              <option value="">Default</option>
+              <option value="radical">Radical</option>
+              <option value="dark">Dark</option>
+              <option value="tokyonight">Tokyo Night</option>
+              <option value="onedark" selected>One Dark</option>
+              <option value="dracula">Dracula</option>
+              <option value="github_dark">GitHub Dark</option>
+              <option value="nord">Nord</option>
+              <option value="gruvbox">Gruvbox</option>
+            </select>
+          </label>
+
+          <div class="theme-swatches" aria-label="Quick theme presets">
+            <button
+              class="swatch active"
+              type="button"
+              data-theme="onedark"
+              style="
+                --swatch-a: #282c34;
+                --swatch-b: #61afef;
+                --swatch-c: #98c379;
+              "
+              title="One Dark"
+            ></button>
+            <button
+              class="swatch"
+              type="button"
+              data-theme="radical"
+              style="
+                --swatch-a: #141321;
+                --swatch-b: #fe428e;
+                --swatch-c: #a9fef7;
+              "
+              title="Radical"
+            ></button>
+            <button
+              class="swatch"
+              type="button"
+              data-theme="tokyonight"
+              style="
+                --swatch-a: #1a1b27;
+                --swatch-b: #70a5fd;
+                --swatch-c: #bf91f3;
+              "
+              title="Tokyo Night"
+            ></button>
+            <button
+              class="swatch"
+              type="button"
+              data-theme="dracula"
+              style="
+                --swatch-a: #282a36;
+                --swatch-b: #ff79c6;
+                --swatch-c: #50fa7b;
+              "
+              title="Dracula"
+            ></button>
+            <button
+              class="swatch"
+              type="button"
+              data-theme="github_dark"
+              style="
+                --swatch-a: #0d1117;
+                --swatch-b: #58a6ff;
+                --swatch-c: #3fb950;
+              "
+              title="GitHub Dark"
+            ></button>
+            <button
+              class="swatch"
+              type="button"
+              data-theme="nord"
+              style="
+                --swatch-a: #2e3440;
+                --swatch-b: #88c0d0;
+                --swatch-c: #a3be8c;
+              "
+              title="Nord"
+            ></button>
+          </div>
+
+          <div class="color-grid" aria-label="Custom card colors">
+            <label class="color-field">
+              <span>Title</span>
+              <input id="title-color" type="color" value="#61afef" />
+            </label>
+            <label class="color-field">
+              <span>Text</span>
+              <input id="text-color" type="color" value="#abb2bf" />
+            </label>
+            <label class="color-field">
+              <span>Icon</span>
+              <input id="icon-color" type="color" value="#98c379" />
+            </label>
+            <label class="color-field">
+              <span>Background</span>
+              <input id="bg-color" type="color" value="#282c34" />
+            </label>
+            <label class="color-field">
+              <span>Border</span>
+              <input id="border-color" type="color" value="#3e4451" />
+            </label>
+            <label class="color-field">
+              <span>Radius</span>
+              <input
+                id="border-radius"
+                type="number"
+                min="0"
+                max="30"
+                value="8"
+              />
+            </label>
+          </div>
+
+          <div class="switch-grid">
+            <label class="switch">
+              <input id="show-icons" type="checkbox" checked />
+              <span>Show icons</span>
+            </label>
+            <label class="switch">
+              <input id="hide-border" type="checkbox" />
+              <span>Hide border</span>
+            </label>
+            <label class="switch">
+              <input id="include-all-commits" type="checkbox" />
+              <span>All commits</span>
+            </label>
+            <label class="switch">
+              <input id="private-count" type="checkbox" />
+              <span>Private count</span>
+            </label>
+            <label class="switch">
+              <input id="hide-title" type="checkbox" />
+              <span>Hide title</span>
+            </label>
+            <label class="switch">
+              <input id="disable-animations" type="checkbox" />
+              <span>No animation</span>
+            </label>
+          </div>
+        </section>
+
+        <section class="panel-section">
+          <div class="section-heading">
+            <span>Card Options</span>
+            <small>Advanced</small>
+          </div>
+
+          <label class="field" data-option-group="stats">
+            <span>Rank icon</span>
+            <select id="rank-icon">
+              <option value="default">Default</option>
+              <option value="github">GitHub</option>
+              <option value="percentile">Percentile</option>
+            </select>
+          </label>
+
+          <label class="field" data-option-group="top-langs wakatime">
+            <span>Language layout</span>
+            <select id="language-layout">
+              <option value="compact" selected>Compact</option>
+              <option value="normal">Normal</option>
+              <option value="donut">Donut</option>
+              <option value="donut-vertical">Donut vertical</option>
+              <option value="pie">Pie</option>
+            </select>
+          </label>
+
+          <label class="field" data-option-group="top-langs wakatime">
+            <span>Language count</span>
+            <input
+              id="language-count"
+              type="number"
+              min="1"
+              max="20"
+              value="6"
+            />
+          </label>
+        </section>
+
+        <section class="panel-section">
+          <div class="section-heading">
+            <span>Presets</span>
+            <small>Browser</small>
+          </div>
+
+          <div class="quick-actions">
+            <button class="text-button" type="button" id="save-preset">
+              Save
+            </button>
+            <button class="text-button" type="button" id="load-preset">
+              Load
+            </button>
+            <button class="text-button" type="button" id="reset-controls">
+              Reset
+            </button>
+          </div>
+
+          <p class="hint" id="preset-hint">
+            Presets are stored only in this browser.
+          </p>
+        </section>
+      </aside>
+
+      <section
+        class="preview-shell"
+        aria-label="Preview and generated markdown"
+      >
+        <div class="preview-header">
+          <div>
+            <p class="eyebrow">Live Preview</p>
+            <h1 id="preview-title">Core profile cards</h1>
+          </div>
+          <div class="preview-actions">
+            <button class="secondary-button" type="button" id="open-preview">
+              Open first card
+            </button>
+            <button class="secondary-button" type="button" id="copy-url-button">
+              Copy URL
+            </button>
+            <button class="secondary-button" type="button" id="share-button">
+              Share setup
+            </button>
+            <button class="primary-button" type="button" id="copy-button">
+              Copy output
+            </button>
+          </div>
+        </div>
+
+        <div class="insight-bar" aria-label="Current preview details">
+          <span><strong id="insight-user">Rensith Udara</strong> Profile</span>
+          <span><strong id="insight-options">Icons on</strong> Options</span>
+          <span><strong id="insight-theme">One Dark</strong> Theme</span>
+        </div>
+
+        <div class="preview-stage" id="preview">
+          <div class="empty-state" id="loading-state">
+            <span class="loader"></span>
+            <strong>Rendering preview</strong>
+            <small>Cards appear here as SVG images.</small>
+          </div>
+        </div>
+
+        <div class="output-panel">
+          <div class="output-header">
+            <div>
+              <p class="eyebrow" id="output-eyebrow">Markdown</p>
+              <h2 id="output-title">Ready for your profile README</h2>
+            </div>
+            <span id="card-count">0 cards</span>
+          </div>
+          <div class="output-tabs" role="tablist" aria-label="Output format">
+            <button
+              class="output-tab active"
+              type="button"
+              data-output="markdown"
+            >
+              Markdown
+            </button>
+            <button class="output-tab" type="button" data-output="html">
+              HTML
+            </button>
+            <button class="output-tab" type="button" data-output="urls">
+              URLs
+            </button>
+          </div>
+          <textarea
+            id="markdown"
+            readonly
+            aria-label="Generated output code"
+          ></textarea>
+        </div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite">
+      Copied to clipboard
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
