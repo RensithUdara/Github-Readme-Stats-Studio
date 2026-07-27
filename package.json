@@ -19,14 +19,12 @@
     "url": "https://github.com/RensithUdara/github-readme-stats-studio.git"
   },
   "scripts": {
-    "theme-readme-gen": "node scripts/generate-theme-doc",
-    "preview-theme": "node scripts/preview-theme",
-    "close-stale-theme-prs": "node scripts/close-stale-theme-prs",
-    "generate-langs-json": "node scripts/generate-langs-json",
+    "dev": "node express.js",
+    "start": "node express.js",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky",
-    "lint": "npx eslint --max-warnings 0 \"./src/**/*.js\" \"./scripts/**/*.js\" \"./api/**/*.js\" \"./themes/**/*.js\""
+    "lint": "npx eslint --max-warnings 0 \"./src/**/*.js\" \"./api/**/*.js\" \"./themes/**/*.js\""
   },
   "author": "Rensith Udara",
   "license": "MIT",
