@@ -19,8 +19,8 @@
     "url": "https://github.com/RensithUdara/github-readme-stats-studio.git"
   },
   "scripts": {
-    "dev": "node express.js",
-    "start": "node express.js",
+    "dev": "node init && node express.js",
+    "start": "node init && node express.js",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky",
