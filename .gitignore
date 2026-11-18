@@ -13,3 +13,6 @@ ui-server.log
 *.code-workspace
 .env
 .vscode/*
+.env.*
+.env.local
+.env.production
